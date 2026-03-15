@@ -14,12 +14,12 @@ inventory = []
 
 
 // UI config
-cell_size_px = 64
+cell_size_px = 48
 
 board_width_px = board_width_cells * cell_size_px
 
-board_topleft_x = 64
-board_topleft_y = 128
+board_topleft_x = cell_size_px*0.5
+board_topleft_y = cell_size_px*1
 
 
 

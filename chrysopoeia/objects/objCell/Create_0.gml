@@ -30,24 +30,28 @@ is_hovering = false
 is_pseudo_hovering = false
 
 // -- Skin
-sprite_decal = sprDev00
+sprite_decal1 = matrixo
+sprite_decal2 = matrixh
+sprite_decal3 = matrixx
 
 
-function cc(_power, _sprite, _name, _procname) {
+function cc(_power, _sprite_inactive, _sprite_active, _sprite_spent, _name, _procname) {
 	return {
 		devpower: _power,
-		devrune: _sprite, // sprite
+		runeused: _sprite_spent,
+		runeactive: _sprite_active,
+		runeinactive: _sprite_inactive,
 		devname: _name, // device
 		procname: _procname // element being added, unused for now
 	}
 }
 
 configs = [
-	cc(1, sprDev01, "Calcinator", "Fire"),
-	cc(2, sprDev02, "Quern", "Earth"),
-	cc(4, sprDev04, "Alembic", "Water"),
-	cc(8, sprDev08, "Athanor", "Air"),
-	cc(16, sprDev16, "Aludel", "Aether"),
+	cc(1, calco, calch, calcx, "Calcinator", "Fire"),
+	cc(2, querno, quernh, quernx, "Quern", "Earth"),
+	cc(4, alemo, alemh, alemx, "Alembic", "Water"),
+	cc(8, atho, athh, athx, "Athanor", "Air"),
+	cc(16, aluo, aluh, aluh, "Aludel", "Aether"),
 ]
 
 // Initializing the cell
@@ -56,13 +60,16 @@ function configure(_device_type) {
 	
 	var _config = configs[device_type]
 	device_power = _config.devpower
-	sprite_decal = _config.devrune
+	sprite_decal1 = _config.runeinactive
+	sprite_decal2 = _config.runeactive
+	sprite_decal3 = _config.runeused
 	device_name = _config.devname
 }
 
 
 /* Switch to hint state if possible */
 function hint() {
+	if (cell_state != STATE_HIDDEN) return; 
 	cell_state = STATE_HINTING
 }
 
