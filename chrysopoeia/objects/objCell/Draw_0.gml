@@ -18,4 +18,4 @@ if cell_state == STATE_HINTING {
 
 
 // DEBUG
-draw_text(x, y, device_value)
+draw_text(x, y, device_power)

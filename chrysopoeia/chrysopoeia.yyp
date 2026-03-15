@@ -32,7 +32,7 @@
     {"id":{"name":"sprDev02","path":"sprites/sprDev02/sprDev02.yy",},},
     {"id":{"name":"sprDev04","path":"sprites/sprDev04/sprDev04.yy",},},
     {"id":{"name":"sprDev08","path":"sprites/sprDev08/sprDev08.yy",},},
-    {"id":{"name":"sprDevGG","path":"sprites/sprDevGG/sprDevGG.yy",},},
+    {"id":{"name":"sprDev16","path":"sprites/sprDev16/sprDev16.yy",},},
     {"id":{"name":"sprDevXX","path":"sprites/sprDevXX/sprDevXX.yy",},},
   ],
   "resourceType":"GMProject",
