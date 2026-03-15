@@ -19,6 +19,8 @@ device_name = "Matrix"
 STATE_HIDDEN = 0
 STATE_HINTING = 1
 STATE_PROBED = 2
+STATE_USED = 3
+STATE_DEAD = 4 // if it lost the game
 cell_state = STATE_HIDDEN
 
 
@@ -59,66 +61,73 @@ function configure(_device_type) {
 }
 
 
-// -----
-function probe() {
-	if cell_state == STATE_PROBED {
-		show_debug_message("noop")
-		return
-	}
-	
-	if device_type == DEVMATRIX {
-		show_debug_message("boop")
-		matrix_reveal()
-		reveal()
-		return
-	}
-	
-	var _cost = 2
-	var _benefit = 1
-	if device_type == 0 {
-		_cost = 1
-	}
-	
-	var _materia_prima = objBoard.inventory[device_type]
-	if _materia_prima < _cost {
-		show_debug_message("lose")
-		return
-	}
-	
-	// animate or whatever
-	show_debug_message("good")
-	objBoard.inventory[device_type] -= _cost
-	objBoard.inventory[device_type + 1] += _benefit
-	reveal()
-}
-
-/* Reveal cell if possible */
-function reveal() {
-	if cell_state == STATE_PROBED {
-		show_debug_message("noop")
-		return
-	}
-	cell_state = STATE_PROBED
-	device_power = 0 // No longer count for sums
-	objBoard.refresh_cells()
-	show_debug_message("woosh")
-}
-
 /* Switch to hint state if possible */
 function hint() {
-	if cell_state != STATE_HIDDEN {
-		return
-	}
 	cell_state = STATE_HINTING
 }
 
-// Special behavior for matrix which triggers hints
-function matrix_reveal() {
-	// TODO: still deciding how to balance this.
-	// maybe have different types of matrix on the board? X, + and *
-	for_orthogonal(function(_neighbor) {
-        _neighbor.hint();
-    });
+
+/* Activate cell if possible */
+function reveal() {
+	cell_state = STATE_PROBED
+	show_debug_message("swish")
+}
+
+/* Activate a cells power */
+function activate() {
+	if device_type == DEVMATRIX {
+		show_debug_message("boop")
+		for_orthogonal(function(_neighbor) {
+	        _neighbor.hint();
+	    });
+	} else {
+		// is alcheming time
+		var _cost = 2
+		var _benefit = 1
+		if device_type == 0 {
+			_cost = 1
+		}
+	
+		var _materia_prima = objBoard.inventory[device_type]
+		if _materia_prima < _cost {
+			// TODO: dead state
+			show_debug_message("lose")
+			return
+		}
+	
+		// animate or whatever
+		show_debug_message("good")
+		objBoard.inventory[device_type] -= _cost
+		objBoard.inventory[device_type + 1] += _benefit
+	}
+	
+	cell_state = STATE_USED
+	device_power = 0 // No longer count for sums
+	objBoard.refresh_cells()
+	
+	show_debug_message("woosh")
+}
+
+
+// -----
+function probe() {
+	switch (cell_state) {
+		case STATE_HIDDEN:
+			hint()
+			break;
+			
+		case STATE_HINTING:
+			reveal()
+			break;
+			
+		case STATE_PROBED:
+			activate()
+			break;
+		
+		default:
+			show_debug_message(cell_state);
+			break;
+	}
 }
 
 /* refresh cell's values */

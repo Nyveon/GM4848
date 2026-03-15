@@ -18,7 +18,7 @@ cell_size_px = 64
 
 board_width_px = board_width_cells * cell_size_px
 
-board_topleft_x = 128
+board_topleft_x = 64
 board_topleft_y = 128
 
 

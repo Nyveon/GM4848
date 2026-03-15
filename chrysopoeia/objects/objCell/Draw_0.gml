@@ -22,6 +22,9 @@ if cell_state == STATE_HINTING {
 	draw_text(x + 32, y + 32, hint_value)
 } else if cell_state == STATE_PROBED {
 	draw_sprite(sprite_decal, 0, x, y)
+} else if cell_state == STATE_USED {
+	// TODO: used variant
+	draw_sprite(sprite_decal, 0, x, y)
 }
 
 
