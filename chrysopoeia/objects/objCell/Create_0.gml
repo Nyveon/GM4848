@@ -17,12 +17,11 @@ device_power = 0
 device_name = "Matrix"
 
 STATE_HIDDEN = 0
-STATE_HINTING = 1
-STATE_PROBED = 2
-STATE_USED = 3
-STATE_DEAD = 4 // if it lost the game
+STATE_PROBED = 1
+STATE_DEAD = 2 // if it lost the game
+STATE_GATHERED = 3
 cell_state = STATE_HIDDEN
-
+is_hinting = false
 
 // -- UI state
 was_hovering = false
@@ -30,9 +29,9 @@ is_hovering = false
 is_pseudo_hovering = false
 
 // -- Skin
-sprite_decal1 = matrixo
-sprite_decal2 = matrixh
-sprite_decal3 = matrixx
+sprite_decal1 = matrixclosed
+sprite_decal2 = matrixopen
+sprite_decal3 = matrixspent
 
 
 function cc(_power, _sprite_inactive, _sprite_active, _sprite_spent, _name, _procname) {
@@ -70,12 +69,13 @@ function configure(_device_type) {
 /* Switch to hint state if possible */
 function hint() {
 	if (cell_state != STATE_HIDDEN) return; 
-	cell_state = STATE_HINTING
+	is_hinting = true
 }
 
 
 /* Activate cell if possible */
 function reveal() {
+	if (cell_state != STATE_HIDDEN) return;
 	cell_state = STATE_PROBED
 	show_debug_message("swish")
 }
@@ -84,9 +84,12 @@ function reveal() {
 function activate() {
 	if device_type == DEVMATRIX {
 		show_debug_message("boop")
+		hint()
+		/*
 		for_orthogonal(function(_neighbor) {
 	        _neighbor.hint();
 	    });
+		*/
 	} else {
 		// is alcheming time
 		var _cost = 2
@@ -108,27 +111,29 @@ function activate() {
 		objBoard.inventory[device_type + 1] += _benefit
 	}
 	
-	cell_state = STATE_USED
-	device_power = 0 // No longer count for sums
-	objBoard.refresh_cells()
-	
+	cell_state = STATE_PROBED
 	show_debug_message("woosh")
 }
 
+// second click on device gathers the resource
+function gather() {
+	if (device_type == DEVMATRIX) return;
+	
+	cell_state = STATE_GATHERED
+	device_power = 0 // No longer count for sums
+	objBoard.refresh_cells()
+	show_debug_message("clink")
+}
 
 // -----
 function probe() {
 	switch (cell_state) {
-		case STATE_HIDDEN:
-			hint()
-			break;
-			
-		case STATE_HINTING:
-			reveal()
-			break;
-			
-		case STATE_PROBED:
+		case STATE_HIDDEN: // Showing nothing
 			activate()
+			break;
+			
+		case STATE_PROBED: // Showing device
+			gather()
 			break;
 		
 		default:
@@ -169,4 +174,25 @@ function for_orthogonal(_callback) {
             _callback(_neighbor);
         }
     }
+}
+
+
+// gets color corresponding to last digit
+function get_color_from_number(_value) {
+    var _digit = abs(_value) % 10;
+
+    static _colors = [
+        #e3ab63, // 0: Sunlit Clay
+        #81bbfc, // 1: Baby Blue Ice
+        #f59d85, // 2: Tangerine Dream
+        #57ceb9, // 3: Turquoise
+        #da9edf, // 4: Plum
+        #bdbc64, // 5: Golden Sand
+        #52c8e4, // 6: Sky Aqua
+        #f198b4, // 7: Pink Mist
+        #8aca89, // 8: Willow Green
+        #b3abfa  // 9: Periwinkle
+    ];
+    
+    return _colors[_digit];
 }
