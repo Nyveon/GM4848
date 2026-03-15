@@ -8,8 +8,10 @@ total_cells = board_width_cells * board_height_cells
 largest_device_type = 4;
 
 // containers
-cells = []
+flatcells = [] //1d array
+cells = [] //2d array
 inventory = []
+
 
 // UI config
 cell_size_px = 64
@@ -57,8 +59,6 @@ function generate_board() {
         current_type -= 1;
         count_to_add *= 2;
     }
-	
-	show_debug_message(devices)
     
     // 3. Shuffle and Apply
     array_shuffle_ext(devices);
@@ -72,10 +72,51 @@ function generate_board() {
 		_cell.configure(_data)
     }
 	
-	// 4. Reset inventory
+	// 4. Set neighbors
+	for (var col = 0; col < board_width_cells; col++) {
+        for (var row = 0; row < board_height_cells; row++) {
+            var _cell = cells[col][row];
+            
+            // Order: N, NE, E, SE, S, SW, W, NW
+            _cell.neighbors = array_create(8, noone);
+            
+            var _directions = [
+                [ 0, -1], // 0: North
+                [ 1, -1], // 1: North-East
+                [ 1,  0], // 2: East
+                [ 1,  1], // 3: South-East
+                [ 0,  1], // 4: South
+                [-1,  1], // 5: South-West
+                [-1,  0], // 6: West
+                [-1, -1]  // 7: North-West
+            ];
+            
+            for (var i = 0; i < 8; i++) {
+                var _check_col = col + _directions[i][0];
+                var _check_row = row + _directions[i][1];
+                
+                if (_check_col >= 0 && _check_col < board_width_cells && 
+                    _check_row >= 0 && _check_row < board_height_cells) {
+                    _cell.neighbors[i] = cells[_check_col][_check_row];
+                }
+            }
+        }
+    }
+	
+	// Post-cconfiguration
+	refresh_cells()
+	
+	// 5. Reset inventory
 	inventory = array_create(largest_device_type + 1, 0)
 	inventory[0] = count_to_add
 	show_debug_message(inventory)
+}
+
+// Re-calculates all cell values
+function refresh_cells() {
+	for (var i = 0; i < array_length(flatcells); i++) {
+		flatcells[i].post_config()
+	}
 }
 
 generate_board()
