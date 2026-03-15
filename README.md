@@ -7,10 +7,18 @@ My entry for the 48th GM48 game jam (source code & assets)
 ## Folders
 
 * [chrysopoeia](chrysopoeia) - The Gamemaker project itself
-* [prototypes](prototypes) - HTML/JS prototypes of main mechanic
+* [brainstorm](brainstorm) - HTML/JS prototypes of main mechanic
+    * testing: `python -m http.server 8000`
 * [assets](assets) - The (final) assets for the game
 * [potential-assets](potential-assets) - Stuff downloaded from gm48 resources and gamemaker marketplace that I might or might not use
 
 ## Credits
 
-// todo
+### Scripts
+
+- https://github.com/tehwave/gm48.net-leaderboards-gms2
+
+### Audio
+
+### Art
+
