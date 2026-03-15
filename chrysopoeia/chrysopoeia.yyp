@@ -26,6 +26,7 @@
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
     {"id":{"name":"sprCell","path":"sprites/sprCell/sprCell.yy",},},
     {"id":{"name":"sprCellHover","path":"sprites/sprCellHover/sprCellHover.yy",},},
+    {"id":{"name":"sprCellPseudoHover","path":"sprites/sprCellPseudoHover/sprCellPseudoHover.yy",},},
     {"id":{"name":"sprDebug","path":"sprites/sprDebug/sprDebug.yy",},},
     {"id":{"name":"sprDev00","path":"sprites/sprDev00/sprDev00.yy",},},
     {"id":{"name":"sprDev01","path":"sprites/sprDev01/sprDev01.yy",},},

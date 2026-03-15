@@ -1,13 +1,16 @@
+// Hover & pseudohover
+sprite_index = sprCell
 if is_hovering {
 	sprite_index = sprCellHover
-} else {
-	sprite_index = sprCell
+} else if is_pseudo_hovering {
+	sprite_index = sprCellPseudoHover
 }
 
 draw_self()
 
 // STATE_HIDDEN draw nothing
 if cell_state == STATE_HINTING {
+	/*
 	if device_type == DEVMATRIX {
 		if hint_value != 0 {
 			draw_text(x + 32, y + 32, hint_value)
@@ -15,6 +18,8 @@ if cell_state == STATE_HINTING {
 	} else {
 		draw_sprite(sprDevXX, 0, x, y)
 	}
+	*/
+	draw_text(x + 32, y + 32, hint_value)
 } else if cell_state == STATE_PROBED {
 	draw_sprite(sprite_decal, 0, x, y)
 }

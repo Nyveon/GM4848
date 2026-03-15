@@ -23,7 +23,9 @@ cell_state = STATE_HIDDEN
 
 
 // -- UI state
+was_hovering = false
 is_hovering = false
+is_pseudo_hovering = false
 
 // -- Skin
 sprite_decal = sprDev00
@@ -113,26 +115,42 @@ function hint() {
 // Special behavior for matrix which triggers hints
 function matrix_reveal() {
 	// TODO: still deciding how to balance this.
-	for (var i = 0; i < array_length(neighbors); i++) {
-		var _neighbor = neighbors[i];
-		if (_neighbor == noone) continue;
-		
-		neighbors[i].hint()
-	}
+	// maybe have different types of matrix on the board? X, + and *
+	for_orthogonal(function(_neighbor) {
+        _neighbor.hint();
+    });
 }
 
-/* refresh cells values */
+/* refresh cell's values */
 function post_config() {
-    var _total_power = 0;
-    
+    hint_value = 0;
+	for_each_neighbor(function(_neighbor) {
+        hint_value += _neighbor.device_power;
+    });
+	
+	is_pseudo_hovering = false
+}
+
+
+// do thing to all neighbors
+function for_each_neighbor(_thing) {
     for (var i = 0; i < array_length(neighbors); i++) {
         var _neighbor = neighbors[i];
-		if (_neighbor == noone) continue;
-
+        
         if (_neighbor != noone) {
-            _total_power += _neighbor.device_power;
+            _thing(_neighbor);
         }
     }
-    
-    hint_value = _total_power
+}
+
+// do to all orthogonal neighbors
+function for_orthogonal(_callback) {
+    // N, S, E, W
+    for (var i = 0; i < 8; i += 2) {
+        var _neighbor = neighbors[i];
+        
+        if (_neighbor != noone) {
+            _callback(_neighbor);
+        }
+    }
 }
