@@ -93,7 +93,6 @@ function activate() {
 	} else {
 		// is alcheming time
 		var _cost = 2
-		var _benefit = 1
 		if device_type == 0 {
 			_cost = 1
 		}
@@ -101,14 +100,16 @@ function activate() {
 		var _materia_prima = objBoard.inventory[device_type]
 		if _materia_prima < _cost {
 			// TODO: dead state
+			objBoard.gamestate = 2;
+			cell_state = STATE_PROBED
 			show_debug_message("lose")
 			return
 		}
 	
 		// animate or whatever
 		show_debug_message("good")
+		objBoard.destructionparticles = device_type
 		objBoard.inventory[device_type] -= _cost
-		objBoard.inventory[device_type + 1] += _benefit
 	}
 	
 	cell_state = STATE_PROBED
@@ -119,10 +120,20 @@ function activate() {
 function gather() {
 	if (device_type == DEVMATRIX) return;
 	
+	if (device_type == 4) {
+		particles(x + 24, y + 24, 256, 3, #FFD700, 48)
+		objBoard.gamestate = 1;
+		return
+	}
+	
+	var _benefit = 1
+	objBoard.inventory[device_type + 1] += _benefit
+	objBoard.creationparticles = device_type + 1
 	cell_state = STATE_GATHERED
 	device_power = 0 // No longer count for sums
 	objBoard.refresh_cells()
 	show_debug_message("clink")
+
 }
 
 // -----

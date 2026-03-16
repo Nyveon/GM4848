@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scr_particles",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_particles",
+  "parent":{
+    "name":"chrysopoeia",
+    "path":"chrysopoeia.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

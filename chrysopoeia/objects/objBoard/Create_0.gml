@@ -17,10 +17,13 @@ inventory = []
 cell_size_px = 48
 
 board_width_px = board_width_cells * cell_size_px
+board_height_px = board_height_cells * cell_size_px
 
-board_topleft_x = cell_size_px*0.5
+board_topleft_x = cell_size_px*1.5
 board_topleft_y = cell_size_px*1
 
+
+gamestate = 0; // 1 is win, 2 is lose
 
 
 // Resets all game state necessary and make a fresh board
@@ -108,8 +111,16 @@ function generate_board() {
 	
 	// 5. Reset inventory
 	inventory = array_create(largest_device_type + 1, 0)
+	count_to_add /= 2
 	inventory[0] = count_to_add
 	show_debug_message(inventory)
+	/*
+	for (var i = 0; i < count_to_add; i++) {
+		var _item = instance_create_layer(invposx, invposy, "Instances", objItem)
+		_item.config(0)
+		invposy += invgap
+	}
+	*/
 }
 
 // Re-calculates all cell values
@@ -121,3 +132,21 @@ function refresh_cells() {
 
 generate_board()
 
+material_sprites = [
+	sprLead,
+	blackash,
+	calyx,
+	selene,
+	ether,
+]
+
+material_colors = [
+	c_dkgray,
+	c_black,
+	c_teal,
+	c_aqua,
+	c_orange,
+]
+
+creationparticles = -1
+destructionparticles = -1

@@ -23,4 +23,5 @@ My entry for the 48th GM48 game jam (source code & assets)
 ### Art
 
 - https://tjtrewin.itch.io/undaunted-pixel-blackletter-font
+- https://gm48.net/resource/41/very-simple-particle-effects
 
