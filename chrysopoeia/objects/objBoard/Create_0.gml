@@ -64,16 +64,32 @@ function generate_board() {
     }
     
     // 3. Shuffle and Apply
+	
+	var corners = [
+		cells[0][0], // Top-Left
+		cells[board_width_cells - 1][0], // Top-Right
+		cells[0][board_height_cells - 1], // Bottom-Left
+		cells[board_width_cells - 1][board_height_cells - 1] // Bottom-Right
+	];
+	
+	// Pre-configure the corners with 0
+	var valid_cells = [];
+	for (var i = 0; i < array_length(flatcells); i++) {
+		var _cell = flatcells[i];
+		var _is_corner = (_cell == corners[0] || _cell == corners[1] || _cell == corners[2] || _cell == corners[3]);
+		
+		if (!_is_corner) {
+			array_push(valid_cells, _cell);
+		}
+	}
+	
     array_shuffle_ext(devices);
-    array_shuffle_ext(flatcells);
+    array_shuffle_ext(valid_cells);
     
-    var fill_limit = min(array_length(devices), array_length(flatcells));
-    for (var i = 0; i < fill_limit; i++) {
-        var _cell = flatcells[i];
-        var _data = devices[i];
-        
-		_cell.configure(_data)
-    }
+	var fill_limit = min(array_length(devices), array_length(valid_cells));
+	for (var i = 0; i < fill_limit; i++) {
+		valid_cells[i].configure(devices[i]);
+	}
 	
 	// 4. Set neighbors
 	for (var col = 0; col < board_width_cells; col++) {
@@ -121,6 +137,10 @@ function generate_board() {
 		invposy += invgap
 	}
 	*/
+	
+	for (var i = 0; i < 4; i++) {
+		corners[i].probe()
+	}
 }
 
 // Re-calculates all cell values

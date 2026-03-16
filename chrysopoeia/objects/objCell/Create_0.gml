@@ -83,6 +83,9 @@ function reveal() {
 /* Activate a cells power */
 function activate() {
 	if device_type == DEVMATRIX {
+		if !audio_is_playing(dclick) {
+					audio_play_sound(dclick, 0, false);
+		}
 		show_debug_message("boop")
 		hint()
 		/*
@@ -102,6 +105,7 @@ function activate() {
 			// TODO: dead state
 			objBoard.gamestate = 2;
 			cell_state = STATE_PROBED
+			audio_play_sound(lose, 0, false);
 			show_debug_message("lose")
 			return
 		}
@@ -123,6 +127,7 @@ function gather() {
 	if (device_type == 4) {
 		particles(x + 24, y + 24, 256, 3, #FFD700, 48)
 		objBoard.gamestate = 1;
+		audio_play_sound(winsound, 0, false);
 		return
 	}
 	

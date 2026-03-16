@@ -17,6 +17,7 @@ invgap = 28
 for (var element = array_length(inventory) - 1; element >= 0; element--) {
 	if (creationparticles == element) {
 		particles(invposx + 8, invposy + 8, 64, -2, material_colors[element], 64)
+		audio_play_sound(dcreate, 0, false);
 		creationparticles = -1
 	}
 	
@@ -28,6 +29,7 @@ for (var element = array_length(inventory) - 1; element >= 0; element--) {
 	
 	if (destructionparticles == element) {
 		particles(invposx + 8, invposy + 8, 64, 3, material_colors[element], 8)
+		audio_play_sound(ddestroy, 0, false);
 		destructionparticles = -1
 	}
 }
